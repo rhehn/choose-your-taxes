@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tax Allocation Survey</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    h2 { text-align: center; }
+    .category { margin: 10px 0; }
+    label { display: inline-block; width: 300px; }
+    input[type="number"] { width: 60px; }
+    #total { font-weight: bold; margin-top: 20px; }
+    #error { color: red; font-weight: bold; }
+    #submit-btn { margin-top: 20px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>How Should Your Taxes Be Spent?</h2>
+  <form id="taxForm">
+    <div class="category"><label>Health Insurance:</label> <input type="number" name="Health Insurance" min="0" max="100" value="0"></div>
+    <div class="category"><label>International Aid:</label> <input type="number" name="International Aid" min="0" max="100" value="0"></div>
+    <div class="category"><label>Law Enforcement:</label> <input type="number" name="Law Enforcement" min="0" max="100" value="0"></div>
+    <div class="category"><label>Economic Security Programs:</label> <input type="number" name="Economic Security Programs" min="0" max="100" value="0"></div>
+    <div class="category"><label>Education:</label> <input type="number" name="Education" min="0" max="100" value="0"></div>
+    <div class="category"><label>Veteran Benefits:</label> <input type="number" name="Veteran Benefits" min="0" max="100" value="0"></div>
+    <div class="category"><label>Interest on Federal Debt:</label> <input type="number" name="Interest on Federal Debt" min="0" max="100" value="0"></div>
+    <div class="category"><label>Military:</label> <input type="number" name="Military" min="0" max="100" value="0"></div>
+    <div class="category"><label>Social Security:</label> <input type="number" name="Social Security" min="0" max="100" value="0"></div>
+    <div class="category"><label>Transportation:</label> <input type="number" name="Transportation" min="0" max="100" value="0"></div>
+    <div class="category"><label>Natural Resources and Agriculture:</label> <input type="number" name="Natural Resources and Agriculture" min="0" max="100" value="0"></div>
+
+    <div id="total">Total: <span id="percentTotal">0</span>%</div>
+    <div id="error"></div>
+    <button type="submit" id="submit-btn">Submit</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('taxForm');
+    const percentTotal = document.getElementById('percentTotal');
+    const error = document.getElementById('error');
+
+    function updateTotal() {
+      const inputs = form.querySelectorAll('input[type="number"]');
+      let total = 0;
+      inputs.forEach(input => {
+        total += parseFloat(input.value) || 0;
+      });
+      percentTotal.textContent = total;
+      error.textContent = (total !== 100) ? "Total must be exactly 100%" : "";
+      return total;
+    }
+
+    form.addEventListener('input', updateTotal);
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (updateTotal() !== 100) {
+        error.textContent = "Please make sure the total is exactly 100%.";
+        return;
+      }
+
+      // Collect and log the data (this can be replaced with real submission logic)
+      const data = {};
+      const inputs = form.querySelectorAll('input[type="number"]');
+      inputs.forEach(input => {
+        data[input.name] = parseFloat(input.value) || 0;
+      });
+
+      console.log("Form submitted:", data);
+      alert("Thank you! Your response has been recorded.");
+      form.reset();
+      updateTotal();
+    });
+
+    updateTotal();
+  </script>
+</body>
+</html>
